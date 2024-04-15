@@ -11,7 +11,17 @@ library(tmap)
 
 library(tidyverse)
 
-fruitBat <- read.csv("D:/SHOAL DATA/Fruit Bats/ATLAS_RousettusAegyptiacus_HulaValley2015-2019.csv", stringsAsFactors=TRUE)
+fruitBat <- read.csv("../Data/Fruit Bats/ATLAS_RousettusAegyptiacus_HulaValley2015-2019.csv", stringsAsFactors=TRUE)
+head(fruitBat)
+library(dplyr)
+idn <- fruitBat %>% group_by(Date, Time) %>% summarise(N = n())
+table(idn$N)
+idn <- idn[idn$N >=2, ]
+fruitBat <- fruitBat[fruitBat$Date %in% idn$Date & fruitBat$Time %in% idn$Time,]
+df <- split(fruitBat, fruitBat$ID)
+plot(df[[1]]$X, df[[1]]$Y)
+
+
 
 df_sf <- st_as_sf(x = fruitBat,
                   coords = c("X", "Y"),
@@ -49,13 +59,16 @@ GPS_fruit <- data.frame(lon = lon_lat$x, lat = lon_lat$y)
 
 #Add to df:
 
-fruitBat$GPS <- GPS_fruit
+fruitBat$GPS.lon <- GPS_fruit$lon
+fruitBat$GPS.lat <- GPS_fruit$lat
 
 head(fruitBat)
 
+df <- split(fruitBat, fruitBat$ID)
+plot(df[[2]]$GPS.lon, df[[2]]$GPS.lat)
 
-
-
+plot(df[[10]]$X, df[[10]]$Y)
+plot(df[[10]]$GPS.lon, df[[10]]$GPS.lat)
 
 
 

@@ -5,8 +5,7 @@ library(swaRmverse)
 
 #Spear nosed bats----
 
-spearBats <- read.csv("D:/SHOAL DATA/spear_bat_data.csv")
-
+spearBats <- read.csv("../Data/spear_bat_data.csv")
 head(spearBats)
 
 spearBats$time <- as.POSIXct(x = spearBats$time, format = '%d/%m/%Y %H:%M:%S', tz = 'America/Panama')
@@ -16,14 +15,14 @@ data_spearBat <- swaRmverse::set_data_format(raw_x = spearBats$location.long,
                                        raw_y = spearBats$location.lat,
                                        raw_t = spearBats$time,
                                        raw_id = spearBats$individual.local.identifier,
-                                       origin = min(spearBats$time),
                                        tz = 'America/Panama')
 
 head(data_spearBat)
-
 tail(data_spearBat)
 
-library(swaRmverse)
+table(data_spearBat$set)
+
+plot(data_spearBat$x)
 
 is_geo <- TRUE
 
@@ -38,14 +37,12 @@ print(paste("Velocity information added for", length(data_dfs), "sets."))
 
 sampling_timestep <- 1
 
-time_window <- 30 # seconds
+time_window <- 5 # seconds
 
 smoothing_time_window <- time_window / sampling_timestep
 
-library(swaRmverse)
-
 g_metr <- group_metrics_per_set(data_list = data_dfs,
-                                mov_av_time_window = smoothing_time_window,
+                                mov_av_tim = smoothing_time_window,
                                 step2time = sampling_timestep,
                                 geo = is_geo,
                                 parallelize = FALSE
@@ -94,50 +91,42 @@ spearBat_metrics <- col_motion_metrics_from_raw(data_spearBat,
 )
 # Percentile: Speed = 40% (3.90), Pol = 40% (0.54). 1600 events, 457.683 mins.
 
-
 head(spearBat_metrics)
-
 summary(spearBat_metrics)
 
 spearBat_metrics$species <- "Greater Spear Nosed Bat"
+write.csv(spearBat_metrics, '../Data/spearBat_metrics.csv', row.names = F)
 
-write.csv(spearBat_metrics, 'data/spearBat_metrics.csv', row.names = F)
-
+###########################################################
 #Fruit Bat----
-library(swaRmverse)
 
-fruitBat <- read.csv("D:/SHOAL DATA/Fruit Bats/ATLAS_RousettusAegyptiacus_HulaValley2015-2019.csv")
+fruitBat <- read.csv("../Data/Fruit Bats/ATLAS_RousettusAegyptiacus_HulaValley2015-2019.csv")
 
 #From here, use 'Conversion' script to convert to lon-lat
 
 fruitBat$time <- paste(fruitBat$Hour, fruitBat$Minute, fruitBat$Second, sep = ':')
-
 fruitBat$date <- paste(fruitBat$Year, fruitBat$Month, fruitBat$Day, sep = '/')
-
 fruitBat$timestamp <- paste(fruitBat$Date, fruitBat$Time, sep = ' ')
-
 fruitBat$dateTime <- as.POSIXct(x = fruitBat$timestamp, format = '%d/%m/%Y %H:%M:%S', tz = 'Asia/Jerusalem')
 
-library(swaRmverse)
-
-fruitBat_data <- set_data_format(raw_x = fruitBat$GPS$lon,
-                           raw_y = fruitBat$GPS$lat,
+fruitBat_data <- set_data_format(raw_x = fruitBat$X,
+                           raw_y = fruitBat$Y,
                            raw_t = fruitBat$dateTime,
                            raw_id = fruitBat$ID,
-                           origin = min(fruitBat$dateTime),
                            tz = "Asia/Jerusalem"
 )
 
 head(fruitBat_data)
 
-is_geo <- TRUE
 
+is_geo <- FALSE
 data_dfs_fruit <- add_velocities(fruitBat_data,
                            geo = is_geo,
                            verbose = TRUE,
                            parallelize = FALSE
 )
 head(data_dfs_fruit[[1]])
+hist(data_dfs_fruit[[1]]$speed)
 
 print(paste("Velocity information added for", length(data_dfs), "sets."))
 
@@ -197,17 +186,13 @@ fruitbat_metrics$species <- "Egyptian Fruit Bat"
 
 write.csv(fruitbat_metrics, 'data/fruitbat_metrics.csv', row.names = F)
 
-
+################################################
 #Pigeons----
 
 #santos----
-library(swaRmverse)
-
-library(dplyr)
-
-santosPigeon <- read.csv("D:/SHOAL DATA/Pigeon Leadership (Santos)/Leadership in homing pigeon flocks (Columba livia) (data from Santos et al. 2014) (3).csv")
-
+santosPigeon <- read.csv("../Data/Leadership in homing pigeon flocks (Columba livia) (data from Santos et al. 2014) (3).csv")
 santosPigeon$dateTime <- as.POSIXct(santosPigeon$timestamp, format = '%d/%m/%Y %H:%M:%OS', tz = "Europe/Paris")
+unique(santosPigeon$individual.local.identifier)
 
 santosPigeon <- santosPigeon %>% distinct(individual.local.identifier,
                       dateTime, .keep_all = T)
@@ -223,20 +208,19 @@ data_santos <- set_data_format(raw_x = santosPigeon$location.long,
 head(data_santos)
 
 tail(data_santos)
-
+plot(data_santos$x, data_santos$y)
 is_geo <- TRUE
-
 data_dfs_santos <- add_velocities(data_santos,
                        geo = is_geo,
                        verbose = TRUE,
                        parallelize = FALSE
 )
-head(data_dfs_santos[[1]])
+hist(data_dfs_santos[[1]]$speed)
+hist(santosPigeon$ground.speed)
 
-print(paste("Velocity information added for", length(data_dfs), "sets."))
+print(paste("Velocity information added for", length(data_dfs_santos), "sets."))
 
 sampling_timestep <- 1
-
 time_window <-  10 # seconds
 
 smoothing_time_window <- time_window / sampling_timestep
@@ -247,11 +231,8 @@ g_metr_santos <- group_metrics_per_set(data_list = data_dfs_santos,
                                 geo = is_geo,
                                 parallelize = FALSE
 )
-
 head(g_metr_santos)
-
 hist(g_metr_santos$speed)
-
 hist(g_metr_santos$pol)
 
 data_santos <- pairwise_metrics(data_list = data_dfs_santos,
@@ -265,96 +246,85 @@ head(data_santos)
 
 tail(data_santos)
 
- santos_metrics <- col_motion_metrics(data_santos,
+santos_metrics <- col_motion_metrics(data_santos,
                                             global_metrics = g_metr_santos,
                                             step2time = sampling_timestep,
                                             verbose = TRUE,
-                                            speed_lim = NA,
-                                            pol_lim = NA)
+                                            speed_lim = 15,
+                                            pol_lim = 0.97,
+                                            noise_thresh = 5)
 # Percentile: Speed 20% (0.55), Pol 90% (0.97). 7179 events over 150.2 mins.
 
-library(swaRmverse)
+santos_metrics$species <- "Columba livia (Santos)"
+head(santos_metrics)
+summary(santos_metrics$event_dur)
+hist(santos_metrics$mean_mean_nnd)
+write.csv(santos_metrics, '../Data/santos_metrics.csv', row.names = F)
 
- santos_metrics$species <- "Columba livia (Santos)"
-
- ncol(santos_metrics)
-
- head(santos_metrics)
-
- write.csv(santos_metrics, 'data/santos_metrics.csv', row.names = F)
+######################################
 #gagliardo----
 
- gagPigeon <- read.csv("D:/SHOAL DATA/Pigeon (Gagliardo)/Use of visual familiar cues in anosmic pigeons.csv")
+gagPigeon <- read.csv("../Data/Pigeon (Gagliardo)/Use of visual familiar cues in anosmic pigeons.csv")
+gagPigeon$dateTime <- as.POSIXct(x = gagPigeon$timestamp, format = '%d/%m/%Y %H:%M:%S', tz = 'Europe/Rome')
 
- gagPigeon$dateTime <- as.POSIXct(x = gagPigeon$timestamp, format = '%d/%m/%Y %H:%M:%S', tz = 'Europe/Rome')
-
- data_gag <- set_data_format(raw_x = gagPigeon$location.long,
-                                raw_y = gagPigeon$location.lat,
-                                raw_t = gagPigeon$dateTime,
-                                raw_id = gagPigeon$individual.local.identifier,
-                                origin = min(gagPigeon$dateTime),
-                                tz = "Europe/Rome"
+data_gag <- set_data_format(
+  raw_x = gagPigeon$location.long,
+  raw_y = gagPigeon$location.lat,
+  raw_t = gagPigeon$dateTime,
+  raw_id = gagPigeon$individual.local.identifier,
+  tz = "Europe/Rome"
  )
+head(data_gag)
+unique(data_gag$id)
+plot(data_gag$x, data_gag$y)
 
- head(data_gag)
+is_geo <- TRUE
 
- is_geo <- TRUE
-
- data_dfs_gag <- add_velocities(data_gag,
+data_dfs_gag <- add_velocities(data_gag,
                         geo = is_geo,
                         verbose = TRUE,
                         parallelize = FALSE
  )
 
- head(data_dfs_gag[[1]])
+head(data_dfs_gag[[1]])
+print(paste("Velocity information added for", length(data_dfs_gag), "sets."))
 
- print(paste("Velocity information added for", length(data_dfs), "sets."))
+hist(data_dfs_gag[[1]]$speed)
+hist(g_metr_santos$pol)
 
- sampling_timestep <- 1
+sampling_timestep <- 1
+time_window <- 10 # seconds
+smoothing_time_window <- time_window / sampling_timestep
 
- time_window <- 20 # seconds
-
- smoothing_time_window <- time_window / sampling_timestep
-
- g_metr_gag <- group_metrics_per_set(data_list = data_dfs_gag,
-                                 mov_av_time_window = smoothing_time_window,
-                                 step2time = sampling_timestep,
-                                 geo = is_geo,
-                                 parallelize = FALSE
- )
-
- head(g_metr_gag)
-
- g_metr_gag <- g_metr_gag[g_metr_gag$N > 1, ]
-
- data_gag <- data_gag[data_gag$t %in% g_metr_gag$t, ]
-
- hist(g_metr_gag$speed)
-
- hist(g_metr_gag$pol)
-
- length(unique(g_metr_gag$set))
-
- table(g_metr_gag$N)
-
-install.packages('dplyr')
-
-library(dplyr)
+g_metr_gag <- group_metrics_per_set(
+  data_list = data_dfs_gag,
+  mov_av_time_window = smoothing_time_window,
+  step2time = sampling_timestep,
+  geo = is_geo,
+  parallelize = FALSE
+)
 
 g_metr_gag %>% group_by(set) %>% summarise(n_timesteps = n(), N = mean(N)) #N; mean of N, splits data into set, summaries sets. n() number of elements. maxtime - meantime
+g_metr_gag <- g_metr_gag[g_metr_gag$N > 1, ]
+data_dfs_gag <- data_dfs_gag[unique(g_metr_gag$set)]
+data_gag <- pairwise_metrics(data_list = data_dfs_gag,
+                             geo = is_geo,
+                             verbose = TRUE,
+                             parallelize = TRUE,
+                             add_coords = FALSE # could be set to FALSE if the relative positions of neighbors are not needed
+)
+
+head(g_metr_gag)
+data_gag <- data_gag[data_gag$t %in% g_metr_gag$t, ]
+hist(g_metr_gag$speed)
+hist(g_metr_gag$pol)
+length(unique(g_metr_gag$set))
+table(g_metr_gag$N)
 
 
- data_gag <- pairwise_metrics(data_list = data_dfs_gag,
-                                 geo = is_geo,
-                                 verbose = TRUE,
-                                 parallelize = TRUE,
-                                 add_coords = FALSE # could be set to FALSE if the relative positions of neighbors are not needed
- )
-
- head(data_gag)
- tail(data_gag)
- summary(data_gag)
- library(swaRmverse)
+head(data_gag)
+tail(data_gag)
+summary(data_gag)
 
  gag_metrics <- col_motion_metrics(data_gag,
                                       global_metrics = g_metr_gag,
