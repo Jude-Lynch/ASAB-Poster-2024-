@@ -303,27 +303,23 @@ library(swaRmverse)
 
 hf1 <- rbind(hf1_A,hf1_C,hf1_D,hf1_F,hf1_G,hf1_H,hf1_I,hf1_J,hf1_K,hf1_L)
 write.csv(hf1,'../Data/Trajectories/pigeonflocks_trajectories/hf1_bind.csv')
-hf1 <- read.csv('../Data/Trajectories/pigeonflocks_trajectories/hf1_bind.csv')
 
-hf1$timestamp <- paste(hf1$date, hf1$time, sep = ' ')
-hf1$timestamp <- as.POSIXct(hf1$timestamp, format = '%d/%m/%Y %H:%M:%OS', tz = "GMT")
+hf1 <- read.csv('../Data/hf1_bind.csv')
 
+head(hf1, 10)
+hf1$sec <-  hf1$centisec/100
 head(hf1)
-tail(hf1)
-summary(hf1)
-
 data_hf1 <- set_data_format(
   raw_x = hf1$X,
   raw_y = hf1$Y,
-  raw_t = hf1$timestamp,
+  raw_t = hf1$sec,
   raw_id = hf1$id,
   flightid = hf1$flight,
-  origin = min(hf1$timestamp),
   tz = "GMT"
 )
 
 summary(data_hf1)
-head(data_hf1)
+head(data_hf1, 10)
 unique(hf1$id)
 plot(hf1$Y,hf1$X)
 
@@ -336,7 +332,10 @@ data_dfs_hf1 <- add_velocities(data_hf1,
 )
 
 
-head(data_dfs_flockC[[1]])
+head(data_dfs_hf1[[1]])
+hist(data_dfs_hf1[[3]]$speed)
+plot(data_dfs_hf1[[1]]$x, data_dfs_hf1[[1]]$y)
+
 print(paste("Velocity information added for", length(data_dfs_hf1), "sets."))
 
 hist(data_dfs_flockC[[1]]$speed)
