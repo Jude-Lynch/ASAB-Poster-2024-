@@ -1,4 +1,4 @@
-## Poster Image
+### Poster Image
 
 library(swaRmverse)
 scores <- read.csv('../Data/Metrics/metrics_pigeons.csv')

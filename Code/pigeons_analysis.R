@@ -799,7 +799,7 @@ tored ~ all_data
 
 swaRmverse::swarm_space
 
-#References----
+##References----
 
 #1) Nagy, M., Ákos, Z., Biro, D., & Vicsek, T. (2010). Hierarchical Group Dynamics in Pigeon Flocks. Nature, 464(7290), 890–893. https://doi.org/10.1038/nature08891
 
