@@ -301,9 +301,15 @@ library(swaRmverse)
 #Import Datasets via working directory.
 
 hf1 <- rbind(hf1_A,hf1_C,hf1_D,hf1_F,hf1_G,hf1_H,hf1_I,hf1_J,hf1_K,hf1_L)
+<<<<<<< HEAD
 write.csv(hf1,'../Data/Datasets/Trajectories/pigeonflocks_trajectories/hf1_bind.csv')
 
 hf1 <- read.csv('../Data/Datasets/Trajectories/pigeonflocks_trajectories/hf1_bind.csv')
+=======
+write.csv(hf1,'../Data/Trajectories/pigeonflocks_trajectories/hf1_bind.csv')
+
+hf1 <- read.csv('../Data/hf1_bind.csv')
+>>>>>>> f7447eb6050cb676ea41e291f571cd0797ce341e
 
 head(hf1, 10)
 hf1$sec <-  hf1$centisec/100
@@ -333,7 +339,11 @@ data_dfs_hf1 <- add_velocities(data_hf1,
 
 head(data_dfs_hf1[[1]])
 hist(data_dfs_hf1[[3]]$speed)
+<<<<<<< HEAD
 plot(data_dfs_hf1[[1]]$y, data_dfs_hf1[[1]]$x)
+=======
+plot(data_dfs_hf1[[1]]$x, data_dfs_hf1[[1]]$y)
+>>>>>>> f7447eb6050cb676ea41e291f571cd0797ce341e
 
 print(paste("Velocity information added for", length(data_dfs_hf1), "sets."))
 
