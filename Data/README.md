@@ -1,6 +1,5 @@
 # Data folder
 Data files listed here. The paths in the code files that link to them should be correct. 
-You can also write a list of which files should be added here in this README file.
 
 # Data files:
   
@@ -12,7 +11,7 @@ Columba livia (Santos):
 ~ GPS data collected included time-stamped longitude and latitude data with a resolution of 0.25 s. 
 ~ Nagy et al. 2010, used 5 Hz, 16 g GPS loggers, attached via backpack elastic harnesses. Santos et al., 2014 used 4 Hz, 25 g GPS loggers (GiPSy1, Technosmart, Italy).
 
-~ Thresholds: Speed = 15%, Polarization = 0.97. 18 events over 78.9 mins.  
+~ Thresholds: Speed = 15, Polarization = 0.97. 18 events over 78.9 mins.  
 
 Columba livia (Sankey (P/C)): 
 
@@ -24,8 +23,8 @@ Columba livia (Sankey (P/C)):
 ~ GPS data loggers had a resolution of 0.2s. 
 
 ~ Thresholds:
-> Predator: Speed = 15%, Polarization = 0.97. 29 events over 16.48 mins 
-> Control: Speed = 15%, Polarization = 0.97. 16 events over 8.85 mins 
+> Predator: Speed = 15, Polarization = 0.97. 29 events over 16.48 mins 
+> Control: Speed = 15, Polarization = 0.97. 16 events over 8.85 mins 
 
 Columba livia (Nagy(hf)): 
 
@@ -35,9 +34,9 @@ Columba livia (Nagy(hf)):
 ~ GPS devices logged 32 hours of flight time. 5 Hz, 16 g GPS loggers, attached via backpack elastic harnesses. 
 
 ~ Thresholds: 
-> hf1: Speed = 15%, Polarization = 0.85. 17 events over 6.65 mins 
-> hf2: Speed = 15%, Polarization = 0.97. 5 events over 14.03 mins
-> hf3: Speed = 15%, Polarization = 0.95. 11 events over 3.77 mins 
+> hf1: Speed = 15, Polarization = 0.85. 17 events over 6.65 mins 
+> hf2: Speed = 15, Polarization = 0.97. 5 events over 14.03 mins
+> hf3: Speed = 15, Polarization = 0.95. 11 events over 3.77 mins 
 > hf4: Speed = 15%, Polarization = 0.95. 7 events over 14.72 mins 
 
 
