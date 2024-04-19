@@ -8,4 +8,4 @@ Here are the code files:
 
 2. pigeons_analysis: The script used to create the Pigeon's and expanded Swarm Space.
 
-3. Tracking: This script uses GGPLOT to show tracking data using event duration. It is designed to plot the XY coordinates during an event by each individual in an event. 
+3. Tracking: This script uses GGPLOT to show tracking data using event duration. It is designed to plot the XY coordinates of an individual during an event.
