@@ -32,6 +32,7 @@ Columba livia (Nagy(hf)):
 
 ~ Data consists of 13 homing pigeons, 1- 5 years old, that have homing experience. Trained to carry GPS data loggers via habituation to 16g 'dummy GPS' weights. The flights used in the Swarm Space were the homing flights (hf), of which there are four. 
 ~ GPS devices logged 32 hours of flight time. 5 Hz, 16 g GPS loggers, attached via backpack elastic harnesses. 
+~ hf was put into 1 dataset using rbind().
 
 ~ Thresholds: 
 > hf1: Speed = 15, Polarization = 0.85. 17 events over 6.65 mins 
