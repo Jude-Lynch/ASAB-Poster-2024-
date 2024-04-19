@@ -1,5 +1,8 @@
 # Asab_Spring_2024
-Reproduces information and plots for ASAB Spring 2024 presentations.
+Reproduces information and plots for ASAB Spring 2024 poster 'A User Experience of the swaRmverse:
+A Tool for Detecting and Analysing Animal Movement' by 'Lynch, J., Garnier, S., King, A.J., Papadopoulou, M., 
+Biosciences, Faculty of Science and Engineering, Swansea University, SA2 8PP Swansea, UK
+Department of Biological Sciences, New Jersey Institute of Technology, NJ 07102, USA'
 
 ## Code
 Here are the code files:
